@@ -1,10 +1,11 @@
 package pomodoroclock;
 
-public class PomodoroScreen extends javax.swing.JFrame 
+public class PomodoroScreen extends Screen
 {
     public PomodoroScreen() 
     {
         initComponents();
+        super.inicialize(400, 300, "Pomodoro Clock");
     }
 
     @SuppressWarnings("unchecked")
