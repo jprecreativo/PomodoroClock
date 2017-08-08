@@ -42,7 +42,7 @@ public class Clock extends TimerTask
             {
                 time.cancel();
                 
-                
+                // Aquí se mostraría un mensaje en la bandeja del sistema.
             }
         }
     }
