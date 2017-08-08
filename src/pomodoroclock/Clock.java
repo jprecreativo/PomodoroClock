@@ -9,23 +9,41 @@ public class Clock extends TimerTask
     private final Timer time = new Timer();
     private final PomodoroScreen screen;
     private final int pomodoro;
+    private int seconds;
     private int minutes;
     
     public Clock(PomodoroScreen screen, int pomodoro)
     {
-        time.schedule(this, 60000, 60000);
+        time.schedule(this, 0, 1000);
         
         this.screen = screen;
         this.pomodoro = pomodoro;
+        
+        seconds = 0;
         minutes = 0;
     }
     
     @Override
     public void run() 
     {
-        if(++minutes == pomodoro)
+        seconds++;
+        
+        if(seconds < 60)
+            screen.updateTime(seconds, minutes);
+        
+        else
         {
-            time.cancel();
+            seconds = 0;
+            minutes++;
+            
+            screen.updateTime(seconds, minutes);
+            
+            if(minutes == pomodoro)
+            {
+                time.cancel();
+                
+                
+            }
         }
     }
 }
