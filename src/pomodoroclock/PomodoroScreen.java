@@ -5,6 +5,8 @@ import javax.swing.JSpinner;
 public class PomodoroScreen extends Screen
 {
     private Clock clock;
+    private int secondsRemaining;
+    private int pomodoro;
     
     public PomodoroScreen() 
     {
@@ -40,6 +42,7 @@ public class PomodoroScreen extends Screen
         jb_start = new javax.swing.JButton();
         jb_stop = new javax.swing.JButton();
         jb_reset = new javax.swing.JButton();
+        jb_continue = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         js_pomodoro = new javax.swing.JSpinner();
@@ -57,6 +60,7 @@ public class PomodoroScreen extends Screen
         jl_minutes.setBackground(new java.awt.Color(0, 255, 255));
         jl_minutes.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         jl_minutes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jl_minutes.setText("0");
         jl_minutes.setOpaque(true);
 
         jl_upperPoint.setBackground(new java.awt.Color(0, 0, 0));
@@ -72,6 +76,7 @@ public class PomodoroScreen extends Screen
         jl_seconds.setBackground(new java.awt.Color(0, 255, 255));
         jl_seconds.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         jl_seconds.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jl_seconds.setText("0");
         jl_seconds.setOpaque(true);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -117,6 +122,7 @@ public class PomodoroScreen extends Screen
         });
 
         jb_stop.setText("Stop");
+        jb_stop.setEnabled(false);
         jb_stop.setFocusable(false);
         jb_stop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,20 +131,37 @@ public class PomodoroScreen extends Screen
         });
 
         jb_reset.setText("Reset");
+        jb_reset.setEnabled(false);
         jb_reset.setFocusable(false);
+        jb_reset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb_resetActionPerformed(evt);
+            }
+        });
+
+        jb_continue.setText("Continue");
+        jb_continue.setEnabled(false);
+        jb_continue.setFocusable(false);
+        jb_continue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb_continueActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jb_continue)
+                .addGap(18, 18, 18)
                 .addComponent(jb_start)
                 .addGap(18, 18, 18)
                 .addComponent(jb_stop)
                 .addGap(18, 18, 18)
                 .addComponent(jb_reset)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -147,7 +170,8 @@ public class PomodoroScreen extends Screen
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jb_start)
                     .addComponent(jb_stop)
-                    .addComponent(jb_reset))
+                    .addComponent(jb_reset)
+                    .addComponent(jb_continue))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -213,6 +237,7 @@ public class PomodoroScreen extends Screen
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
         bg_make.add(jRadioButton1);
+        jRadioButton1.setSelected(true);
         jRadioButton1.setText("Make Pomodoro");
         jRadioButton1.setFocusable(false);
 
@@ -281,15 +306,52 @@ public class PomodoroScreen extends Screen
 
     private void jb_startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_startActionPerformed
         
-        clock = new Clock(this, 3);
+        pomodoro = (int) js_pomodoro.getValue();
+        
+        clock = new Clock(this, pomodoro, 0, 0, false);
         
         jb_start.setEnabled(false);
+        jb_stop.setEnabled(true);
     }//GEN-LAST:event_jb_startActionPerformed
 
     private void jb_stopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_stopActionPerformed
         
         clock.cancel();
+        
+        int currentMinutes = Integer.parseInt(jl_minutes.getText());
+        int currentSeconds = Integer.parseInt(jl_seconds.getText());
+        
+        secondsRemaining = (pomodoro * 60) - (currentMinutes * 60) - currentSeconds;
+        
+        jb_stop.setEnabled(false);
+        jb_continue.setEnabled(true);
+        jb_reset.setEnabled(true);
     }//GEN-LAST:event_jb_stopActionPerformed
+
+    private void jb_resetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_resetActionPerformed
+        
+        clock.cancel();
+        
+        jl_minutes.setText("0");
+        jl_seconds.setText("0");
+        
+        jb_continue.setEnabled(false);
+        jb_start.setEnabled(true);
+        jb_stop.setEnabled(false);
+        jb_reset.setEnabled(false);
+    }//GEN-LAST:event_jb_resetActionPerformed
+
+    private void jb_continueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_continueActionPerformed
+       
+        int currentMinutes = Integer.parseInt(jl_minutes.getText());
+        int currentSeconds = Integer.parseInt(jl_seconds.getText());
+        
+        clock =  new Clock(this, secondsRemaining, currentSeconds, currentMinutes, true);
+
+        jb_continue.setEnabled(false);
+        jb_reset.setEnabled(false);
+        jb_stop.setEnabled(true);
+    }//GEN-LAST:event_jb_continueActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -335,6 +397,7 @@ public class PomodoroScreen extends Screen
     private javax.swing.JPanel jPanel4;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JButton jb_continue;
     private javax.swing.JButton jb_reset;
     private javax.swing.JButton jb_start;
     private javax.swing.JButton jb_stop;

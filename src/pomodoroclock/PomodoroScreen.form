@@ -125,6 +125,7 @@
               <Font name="Tahoma" size="48" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="text" type="java.lang.String" value="0"/>
             <Property name="opaque" type="boolean" value="true"/>
           </Properties>
         </Component>
@@ -161,6 +162,7 @@
               <Font name="Tahoma" size="48" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="text" type="java.lang.String" value="0"/>
             <Property name="opaque" type="boolean" value="true"/>
           </Properties>
         </Component>
@@ -177,13 +179,15 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="jb_continue" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jb_start" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jb_stop" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jb_reset" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -195,6 +199,7 @@
                       <Component id="jb_start" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jb_stop" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jb_reset" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jb_continue" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -214,6 +219,7 @@
         <Component class="javax.swing.JButton" name="jb_stop">
           <Properties>
             <Property name="text" type="java.lang.String" value="Stop"/>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
           </Properties>
           <Events>
@@ -223,8 +229,22 @@
         <Component class="javax.swing.JButton" name="jb_reset">
           <Properties>
             <Property name="text" type="java.lang.String" value="Reset"/>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jb_resetActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jb_continue">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Continue"/>
+            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jb_continueActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -376,6 +396,7 @@
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="bg_make"/>
             </Property>
+            <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Make Pomodoro"/>
             <Property name="focusable" type="boolean" value="false"/>
           </Properties>
