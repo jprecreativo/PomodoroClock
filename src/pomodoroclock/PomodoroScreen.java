@@ -1,5 +1,11 @@
 package pomodoroclock;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JSpinner;
 
 public class PomodoroScreen extends Screen
@@ -8,10 +14,17 @@ public class PomodoroScreen extends Screen
     private int secondsRemaining;
     private int pomodoro;
     
-    public PomodoroScreen() 
+    public PomodoroScreen() throws IOException 
     {
         initComponents();
         super.inicialize(420, 320, "Pomodoro Clock");
+        
+        BufferedImage imagePomodoro = ImageIO.read(new File("src/images/Clock.png"));
+        JLabel picPomodoro = new JLabel(new ImageIcon(imagePomodoro));
+        
+        picPomodoro.setBounds(0, 0, jp_image.getWidth(), jp_image.getHeight());
+        
+        jp_image.add(picPomodoro);
         
         js_pomodoro.setEditor(new JSpinner.DefaultEditor(js_pomodoro));
         js_break.setEditor(new JSpinner.DefaultEditor(js_break));
@@ -32,12 +45,12 @@ public class PomodoroScreen extends Screen
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        bg_make = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jl_minutes = new javax.swing.JLabel();
         jl_upperPoint = new javax.swing.JLabel();
         jl_lowerPoint = new javax.swing.JLabel();
         jl_seconds = new javax.swing.JLabel();
+        jp_image = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jb_start = new javax.swing.JButton();
         jb_stop = new javax.swing.JButton();
@@ -50,9 +63,6 @@ public class PomodoroScreen extends Screen
         jLabel3 = new javax.swing.JLabel();
         js_break = new javax.swing.JSpinner();
         jLabel4 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -79,12 +89,27 @@ public class PomodoroScreen extends Screen
         jl_seconds.setText("0");
         jl_seconds.setOpaque(true);
 
+        jp_image.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jp_imageLayout = new javax.swing.GroupLayout(jp_image);
+        jp_image.setLayout(jp_imageLayout);
+        jp_imageLayout.setHorizontalGroup(
+            jp_imageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 144, Short.MAX_VALUE)
+        );
+        jp_imageLayout.setVerticalGroup(
+            jp_imageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jp_image, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jl_minutes, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -109,6 +134,7 @@ public class PomodoroScreen extends Screen
                             .addComponent(jl_seconds, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jl_minutes, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(15, Short.MAX_VALUE))
+            .addComponent(jp_image, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -180,7 +206,7 @@ public class PomodoroScreen extends Screen
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("Duration of Pomodoro:");
 
-        js_pomodoro.setModel(new javax.swing.SpinnerNumberModel(10, 10, 30, 1));
+        js_pomodoro.setModel(new javax.swing.SpinnerNumberModel(25, 10, 30, 1));
         js_pomodoro.setEditor(new javax.swing.JSpinner.NumberEditor(js_pomodoro, ""));
         js_pomodoro.setFocusable(false);
 
@@ -190,7 +216,7 @@ public class PomodoroScreen extends Screen
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel3.setText("Duration of break:");
 
-        js_break.setModel(new javax.swing.SpinnerNumberModel(10, 10, 30, 1));
+        js_break.setModel(new javax.swing.SpinnerNumberModel(5, 5, 30, 1));
         js_break.setEditor(new javax.swing.JSpinner.NumberEditor(js_break, ""));
         js_break.setFocusable(false);
 
@@ -234,38 +260,6 @@ public class PomodoroScreen extends Screen
                 .addContainerGap(43, Short.MAX_VALUE))
         );
 
-        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-
-        bg_make.add(jRadioButton1);
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setText("Make Pomodoro");
-        jRadioButton1.setFocusable(false);
-
-        bg_make.add(jRadioButton2);
-        jRadioButton2.setText("Make break");
-        jRadioButton2.setFocusable(false);
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jRadioButton2)
-                    .addComponent(jRadioButton1))
-                .addContainerGap(21, Short.MAX_VALUE))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(jRadioButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jRadioButton2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -277,23 +271,17 @@ public class PomodoroScreen extends Screen
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(30, 30, 30))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
@@ -353,40 +341,7 @@ public class PomodoroScreen extends Screen
         jb_stop.setEnabled(true);
     }//GEN-LAST:event_jb_continueActionPerformed
 
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PomodoroScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PomodoroScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PomodoroScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PomodoroScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new PomodoroScreen().setVisible(true);
-            }
-        });
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup bg_make;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -394,9 +349,6 @@ public class PomodoroScreen extends Screen
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JButton jb_continue;
     private javax.swing.JButton jb_reset;
     private javax.swing.JButton jb_start;
@@ -405,6 +357,7 @@ public class PomodoroScreen extends Screen
     private javax.swing.JLabel jl_minutes;
     private javax.swing.JLabel jl_seconds;
     private javax.swing.JLabel jl_upperPoint;
+    private javax.swing.JPanel jp_image;
     private javax.swing.JSpinner js_break;
     private javax.swing.JSpinner js_pomodoro;
     // End of variables declaration//GEN-END:variables
