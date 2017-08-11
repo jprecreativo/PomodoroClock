@@ -12,7 +12,8 @@ public class PomodoroScreen extends Screen
 {
     private Clock clock;
     private int secondsRemaining;
-    private int pomodoro;
+    private int minutes;
+    private boolean makeBreak;
     
     public PomodoroScreen() throws IOException 
     {
@@ -39,6 +40,17 @@ public class PomodoroScreen extends Screen
     {
         jl_seconds.setText(Integer.toString(seconds));
         jl_minutes.setText(Integer.toString(minutes));
+    }
+    
+    /**
+     * This method will be call when current Pomodoro or break had finished.
+     */
+    public void pomodoroBreakFinish()
+    {
+        jb_stop.setEnabled(false);
+        jb_start.setEnabled(true);
+        
+        makeBreak = !makeBreak;
     }
 
     @SuppressWarnings("unchecked")
@@ -95,7 +107,7 @@ public class PomodoroScreen extends Screen
         jp_image.setLayout(jp_imageLayout);
         jp_imageLayout.setHorizontalGroup(
             jp_imageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 144, Short.MAX_VALUE)
+            .addGap(0, 154, Short.MAX_VALUE)
         );
         jp_imageLayout.setVerticalGroup(
             jp_imageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -107,8 +119,7 @@ public class PomodoroScreen extends Screen
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jp_image, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jp_image, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jl_minutes, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -294,9 +305,16 @@ public class PomodoroScreen extends Screen
 
     private void jb_startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_startActionPerformed
         
-        pomodoro = (int) js_pomodoro.getValue();
+        jl_minutes.setText("0");
+        jl_seconds.setText("0");
         
-        clock = new Clock(this, pomodoro, 0, 0, false);
+        if(!makeBreak)
+            minutes = (int) js_pomodoro.getValue();
+        
+        else
+            minutes = (int) js_break.getValue();
+        
+        clock = new Clock(this, minutes, 0, 0, false);
         
         jb_start.setEnabled(false);
         jb_stop.setEnabled(true);
@@ -309,7 +327,7 @@ public class PomodoroScreen extends Screen
         int currentMinutes = Integer.parseInt(jl_minutes.getText());
         int currentSeconds = Integer.parseInt(jl_seconds.getText());
         
-        secondsRemaining = (pomodoro * 60) - (currentMinutes * 60) - currentSeconds;
+        secondsRemaining = (minutes * 60) - (currentMinutes * 60) - currentSeconds;
         
         jb_stop.setEnabled(false);
         jb_continue.setEnabled(true);

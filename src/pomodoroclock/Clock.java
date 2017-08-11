@@ -2,7 +2,6 @@ package pomodoroclock;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import javax.swing.JFrame;
 
 public class Clock extends TimerTask
 {
@@ -15,7 +14,7 @@ public class Clock extends TimerTask
     
     public Clock(PomodoroScreen screen, int pomodoro, int seconds, int minutes, boolean stop)
     {
-        time.schedule(this, 0, 1000);
+        time.schedule(this, 1000, 1000);
         
         this.screen = screen;
         this.pomodoro = pomodoro;
@@ -47,6 +46,7 @@ public class Clock extends TimerTask
                 if(minutes == pomodoro)
                 {
                     time.cancel();
+                    screen.pomodoroBreakFinish();
 
                     // Aquí se mostraría un mensaje en la bandeja del sistema.
                 }
@@ -73,6 +73,7 @@ public class Clock extends TimerTask
                 if(0 == pomodoro)
                 {
                     time.cancel();
+                    screen.pomodoroBreakFinish();
 
                     // Aquí se mostraría un mensaje en la bandeja del sistema.
                 }
