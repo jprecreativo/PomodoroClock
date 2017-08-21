@@ -48,7 +48,9 @@ public class Clock extends TimerTask
                     time.cancel();
                     screen.pomodoroBreakFinish();
 
-                    // Aquí se mostraría un mensaje en la bandeja del sistema.
+                    /* Aquí se mostraría un mensaje en la bandeja del sistema. También podría poner la aplicación
+                       maximizada y en primer plano.
+                    */
                 }
             }
         }
@@ -75,7 +77,9 @@ public class Clock extends TimerTask
                     time.cancel();
                     screen.pomodoroBreakFinish();
 
-                    // Aquí se mostraría un mensaje en la bandeja del sistema.
+                    /* Aquí se mostraría un mensaje en la bandeja del sistema. También podría poner la aplicación
+                       maximizada y en primer plano.
+                    */
                 }
             }
         }

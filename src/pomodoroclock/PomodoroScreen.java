@@ -1,5 +1,16 @@
 package pomodoroclock;
 
+import java.awt.AWTException;
+import static java.awt.Frame.ICONIFIED;
+import static java.awt.Frame.NORMAL;
+import java.awt.Image;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +25,8 @@ public class PomodoroScreen extends Screen
     private int secondsRemaining;
     private int minutes;
     private boolean makeBreak;
+    private SystemTray tray;
+    private final TrayIcon trayIcon;
     
     public PomodoroScreen() throws IOException 
     {
@@ -29,6 +42,9 @@ public class PomodoroScreen extends Screen
         
         js_pomodoro.setEditor(new JSpinner.DefaultEditor(js_pomodoro));
         js_break.setEditor(new JSpinner.DefaultEditor(js_break));
+        
+        Image image = Toolkit.getDefaultToolkit().getImage("src/images/Pomodoro.jpg"); 
+        trayIcon = new TrayIcon(image, "Pomodoro Clock", null);
     }
     
     /**
@@ -57,6 +73,10 @@ public class PomodoroScreen extends Screen
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        popupContextual = new javax.swing.JPopupMenu();
+        menuItemRestore = new javax.swing.JMenuItem();
+        separator = new javax.swing.JSeparator();
+        menuItemSalir = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jl_minutes = new javax.swing.JLabel();
         jl_upperPoint = new javax.swing.JLabel();
@@ -76,8 +96,30 @@ public class PomodoroScreen extends Screen
         js_break = new javax.swing.JSpinner();
         jLabel4 = new javax.swing.JLabel();
 
+        menuItemRestore.setText("Restaurar");
+        menuItemRestore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemRestoreActionPerformed(evt);
+            }
+        });
+        popupContextual.add(menuItemRestore);
+        popupContextual.add(separator);
+
+        menuItemSalir.setText("Salir");
+        menuItemSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemSalirActionPerformed(evt);
+            }
+        });
+        popupContextual.add(menuItemSalir);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
+        addWindowStateListener(new java.awt.event.WindowStateListener() {
+            public void windowStateChanged(java.awt.event.WindowEvent evt) {
+                EstadoCambiado(evt);
+            }
+        });
 
         jl_minutes.setBackground(new java.awt.Color(0, 255, 255));
         jl_minutes.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
@@ -359,6 +401,93 @@ public class PomodoroScreen extends Screen
         jb_stop.setEnabled(true);
     }//GEN-LAST:event_jb_continueActionPerformed
 
+    private void menuItemRestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemRestoreActionPerformed
+
+        this.setVisible(true);                                               
+        this.toFront();
+        tray.remove(trayIcon);
+    }//GEN-LAST:event_menuItemRestoreActionPerformed
+
+    private void menuItemSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSalirActionPerformed
+        
+        System.exit(0);
+    }//GEN-LAST:event_menuItemSalirActionPerformed
+
+    private void EstadoCambiado(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_EstadoCambiado
+        
+        if (evt.getNewState() == ICONIFIED) 
+        {
+            this.setState(NORMAL);
+            this.setVisible(false);
+
+            if (SystemTray.isSupported()) 
+            {
+                tray = SystemTray.getSystemTray();
+
+                MouseListener mouseListener = new MouseListener() {
+
+                    @Override
+                    public void mouseClicked(MouseEvent e) 
+                    {
+                        
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) 
+                    {
+
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) 
+                    {
+
+                    }
+
+                    @Override
+                    public void mousePressed(MouseEvent e) 
+                    {
+                        
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) 
+                    {
+                        if (e.getButton() == MouseEvent.BUTTON1) 
+                        {
+                            String message = jl_minutes.getText() + " minutes, ";
+                            message += Integer.parseInt(jl_seconds.getText()) + " seconds.";
+                            
+                            trayIcon.displayMessage("Pomodoro Clock", message, TrayIcon.MessageType.INFO);
+                        }
+                        
+                        if (e.isPopupTrigger()) 
+                        {
+                            popupContextual.setLocation(e.getX(), e.getY());
+                            popupContextual.setInvoker(popupContextual);
+                            popupContextual.setVisible(true);
+                        }                    
+                    }
+                };
+
+                trayIcon.setImageAutoSize(true);
+                trayIcon.addMouseListener(mouseListener);
+                trayIcon.addActionListener((ActionEvent e) -> {
+                    menuItemRestoreActionPerformed(e);
+                });
+
+                try {
+                    tray.add(trayIcon);
+                } catch (AWTException e) {
+                    System.err.println("No se pudo agregar el ícono a la barra tray");
+                    this.setVisible(true);
+                }
+            } else {
+                //  System Tray is not supported
+            }
+        }
+    }//GEN-LAST:event_EstadoCambiado
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -378,5 +507,9 @@ public class PomodoroScreen extends Screen
     private javax.swing.JPanel jp_image;
     private javax.swing.JSpinner js_break;
     private javax.swing.JSpinner js_pomodoro;
+    private javax.swing.JMenuItem menuItemRestore;
+    private javax.swing.JMenuItem menuItemSalir;
+    private javax.swing.JPopupMenu popupContextual;
+    private javax.swing.JSeparator separator;
     // End of variables declaration//GEN-END:variables
 }
