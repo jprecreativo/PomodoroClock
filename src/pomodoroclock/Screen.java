@@ -16,5 +16,6 @@ public abstract class Screen extends JFrame
         this.setTitle(title);
         this.getContentPane().setBackground(Color.WHITE);
         this.setIconImage(icon.getImage());
+        this.setVisible(true);
     }
 }
