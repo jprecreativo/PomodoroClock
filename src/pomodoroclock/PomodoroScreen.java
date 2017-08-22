@@ -8,7 +8,6 @@ import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -44,7 +43,7 @@ public class PomodoroScreen extends Screen
         js_break.setEditor(new JSpinner.DefaultEditor(js_break));
         
         Image image = Toolkit.getDefaultToolkit().getImage("src/images/Pomodoro.jpg"); 
-        trayIcon = new TrayIcon(image, "Pomodoro Clock", null);
+        trayIcon = new TrayIcon(image);
     }
     
     /**
@@ -68,7 +67,57 @@ public class PomodoroScreen extends Screen
         
         makeBreak = !makeBreak;
     }
+    
+    public void maximize()
+    {
+        this.setVisible(true);                                               
+        this.toFront();
+        tray.remove(trayIcon);
+    }
+    
+    private MouseListener createTrayIconMouseListener()
+    {
+        MouseListener mouseListener = new MouseListener() {
 
+            @Override
+            public void mouseClicked(MouseEvent e) 
+            {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) 
+            {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) 
+            {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) 
+            {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) 
+            {
+                if (e.isPopupTrigger()) 
+                {
+                    popupContextual.setLocation(e.getX(), e.getY());
+                    popupContextual.setInvoker(popupContextual);
+                    popupContextual.setVisible(true);
+                }
+            }
+        };
+        
+        return mouseListener;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -356,7 +405,7 @@ public class PomodoroScreen extends Screen
         else
             minutes = (int) js_break.getValue();
         
-        clock = new Clock(this, minutes, 0, 0, false);
+        clock = new Clock(this, trayIcon, minutes, 0, 0, false);
         
         jb_start.setEnabled(false);
         jb_stop.setEnabled(true);
@@ -394,7 +443,7 @@ public class PomodoroScreen extends Screen
         int currentMinutes = Integer.parseInt(jl_minutes.getText());
         int currentSeconds = Integer.parseInt(jl_seconds.getText());
         
-        clock =  new Clock(this, secondsRemaining, currentSeconds, currentMinutes, true);
+        clock =  new Clock(this, trayIcon, secondsRemaining, currentSeconds, currentMinutes, true);
 
         jb_continue.setEnabled(false);
         jb_reset.setEnabled(false);
@@ -403,9 +452,7 @@ public class PomodoroScreen extends Screen
 
     private void menuItemRestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemRestoreActionPerformed
 
-        this.setVisible(true);                                               
-        this.toFront();
-        tray.remove(trayIcon);
+        this.maximize();
     }//GEN-LAST:event_menuItemRestoreActionPerformed
 
     private void menuItemSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSalirActionPerformed
@@ -420,71 +467,25 @@ public class PomodoroScreen extends Screen
             this.setState(NORMAL);
             this.setVisible(false);
 
-            if (SystemTray.isSupported()) 
+            if(SystemTray.isSupported()) 
             {
                 tray = SystemTray.getSystemTray();
-
-                MouseListener mouseListener = new MouseListener() {
-
-                    @Override
-                    public void mouseClicked(MouseEvent e) 
-                    {
-                        
-                    }
-
-                    @Override
-                    public void mouseEntered(MouseEvent e) 
-                    {
-
-                    }
-
-                    @Override
-                    public void mouseExited(MouseEvent e) 
-                    {
-
-                    }
-
-                    @Override
-                    public void mousePressed(MouseEvent e) 
-                    {
-                        
-                    }
-
-                    @Override
-                    public void mouseReleased(MouseEvent e) 
-                    {
-                        if (e.getButton() == MouseEvent.BUTTON1) 
-                        {
-                            String message = jl_minutes.getText() + " minutes, ";
-                            message += Integer.parseInt(jl_seconds.getText()) + " seconds.";
-                            
-                            trayIcon.displayMessage("Pomodoro Clock", message, TrayIcon.MessageType.INFO);
-                        }
-                        
-                        if (e.isPopupTrigger()) 
-                        {
-                            popupContextual.setLocation(e.getX(), e.getY());
-                            popupContextual.setInvoker(popupContextual);
-                            popupContextual.setVisible(true);
-                        }                    
-                    }
-                };
-
                 trayIcon.setImageAutoSize(true);
-                trayIcon.addMouseListener(mouseListener);
+                trayIcon.addMouseListener(this.createTrayIconMouseListener());
                 trayIcon.addActionListener((ActionEvent e) -> {
                     menuItemRestoreActionPerformed(e);
                 });
 
-                try {
+                try 
+                {
                     tray.add(trayIcon);
-                } catch (AWTException e) {
-                    System.err.println("No se pudo agregar el ícono a la barra tray");
+                } 
+                
+                catch(AWTException e) 
+                {
                     this.setVisible(true);
-                }
-            } else {
-                //  System Tray is not supported
-            }
+                } 
+            } 
         }
     }//GEN-LAST:event_EstadoCambiado
 

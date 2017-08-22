@@ -1,22 +1,49 @@
 package pomodoroclock;
 
+import java.awt.TrayIcon;
+import java.io.File;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Clock extends TimerTask
 {
     private final Timer time = new Timer();
     private final PomodoroScreen screen;
+    private final TrayIcon trayIcon;
     private int pomodoro;
     private int seconds;
     private int minutes;
     private final boolean stop;
     
-    public Clock(PomodoroScreen screen, int pomodoro, int seconds, int minutes, boolean stop)
+    private void timeOut() throws InterruptedException, UnsupportedAudioFileException, IOException, LineUnavailableException
+    {
+        time.cancel();
+        screen.pomodoroBreakFinish();
+        
+        Clip alarm = AudioSystem.getClip();
+
+        alarm.open(AudioSystem.getAudioInputStream(new File("src/sounds/Alarm.wav")));
+        alarm.start();
+        
+        Thread.sleep(1500);
+        
+        trayIcon.displayMessage("Pomodoro Clock", "Time out!", TrayIcon.MessageType.INFO);
+        screen.maximize();
+    }
+    
+    public Clock(PomodoroScreen screen, TrayIcon trayIcon, int pomodoro, int seconds, int minutes, boolean stop)
     {
         time.schedule(this, 1000, 1000);
         
         this.screen = screen;
+        this.trayIcon = trayIcon;
         this.pomodoro = pomodoro;
         this.stop = stop;
         this.seconds = seconds;
@@ -25,7 +52,9 @@ public class Clock extends TimerTask
     
     @Override
     public void run() 
-    {
+    {                    
+        trayIcon.setToolTip("" + minutes + " minutes, " + seconds + " seconds.");
+        
         if(!stop)
         {
             /* In this case, user never stops the clock. Field 'Pomodoro' indicates Pomodoro duration or break time
@@ -44,14 +73,15 @@ public class Clock extends TimerTask
                 screen.updateTime(seconds, minutes);
 
                 if(minutes == pomodoro)
-                {
-                    time.cancel();
-                    screen.pomodoroBreakFinish();
+                    try 
+                    {
+                        this.timeOut();
+                    } 
 
-                    /* Aquí se mostraría un mensaje en la bandeja del sistema. También podría poner la aplicación
-                       maximizada y en primer plano.
-                    */
-                }
+                    catch (InterruptedException | UnsupportedAudioFileException | IOException | LineUnavailableException ex) 
+                    {
+                        
+                    }
             }
         }
         
@@ -73,14 +103,15 @@ public class Clock extends TimerTask
                 screen.updateTime(seconds, minutes);
 
                 if(0 == pomodoro)
-                {
-                    time.cancel();
-                    screen.pomodoroBreakFinish();
+                    try 
+                    {
+                        this.timeOut();
+                    } 
 
-                    /* Aquí se mostraría un mensaje en la bandeja del sistema. También podría poner la aplicación
-                       maximizada y en primer plano.
-                    */
-                }
+                    catch (InterruptedException | UnsupportedAudioFileException | IOException | LineUnavailableException ex) 
+                    {
+                        
+                    }
             }
         }
     }
