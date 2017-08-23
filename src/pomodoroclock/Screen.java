@@ -1,6 +1,7 @@
 package pomodoroclock;
 
 import java.awt.Color;
+import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -8,7 +9,8 @@ public abstract class Screen extends JFrame
 {
     public void inicialize(int width, int height, String title)
     {
-        ImageIcon icon = new ImageIcon("src/images/Pomodoro.jpg");
+        URL imgURL = this.getClass().getResource("Pomodoro.jpg");
+        ImageIcon icon = new ImageIcon(imgURL);
         
         this.setSize(width, height);
         this.setLocationRelativeTo(null);

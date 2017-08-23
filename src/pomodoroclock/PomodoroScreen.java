@@ -3,20 +3,18 @@ package pomodoroclock;
 import java.awt.AWTException;
 import static java.awt.Frame.ICONIFIED;
 import static java.awt.Frame.NORMAL;
-import java.awt.Image;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
+import java.net.URL;
 import javax.swing.ImageIcon;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
-import javax.swing.JSpinner;
+import javax.swing.JSpinner.DefaultEditor;
 
 public class PomodoroScreen extends Screen
 {
@@ -32,18 +30,25 @@ public class PomodoroScreen extends Screen
         initComponents();
         super.inicialize(420, 320, "Pomodoro Clock");
         
-        BufferedImage imagePomodoro = ImageIO.read(new File("src/images/Clock.png"));
-        JLabel picPomodoro = new JLabel(new ImageIcon(imagePomodoro));
+        // Load images:
+        
+        URL imgURL = this.getClass().getResource("Clock.png");
+        JLabel picPomodoro = new JLabel(new ImageIcon(imgURL));
         
         picPomodoro.setBounds(0, 0, jp_image.getWidth(), jp_image.getHeight());
-        
         jp_image.add(picPomodoro);
         
-        js_pomodoro.setEditor(new JSpinner.DefaultEditor(js_pomodoro));
-        js_break.setEditor(new JSpinner.DefaultEditor(js_break));
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        imgURL = this.getClass().getResource("Pomodoro.jpg");
+        trayIcon = new TrayIcon(tk.getImage(imgURL));
         
-        Image image = Toolkit.getDefaultToolkit().getImage("src/images/Pomodoro.jpg"); 
-        trayIcon = new TrayIcon(image);
+        // Put as "non-editable" the spinners:
+        
+        JFormattedTextField spinner = ((DefaultEditor) js_pomodoro.getEditor()).getTextField();
+        spinner.setEditable(false);
+        
+        spinner = ((DefaultEditor) js_break.getEditor()).getTextField();
+        spinner.setEditable(false);
     }
     
     /**

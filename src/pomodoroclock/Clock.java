@@ -3,10 +3,9 @@ package pomodoroclock;
 import java.awt.TrayIcon;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
@@ -28,13 +27,15 @@ public class Clock extends TimerTask
         screen.pomodoroBreakFinish();
         
         Clip alarm = AudioSystem.getClip();
+        URL alarmURL = this.getClass().getResource("Alarm.wav");
 
-        alarm.open(AudioSystem.getAudioInputStream(new File("src/sounds/Alarm.wav")));
+        alarm.open(AudioSystem.getAudioInputStream(alarmURL));
         alarm.start();
         
-        Thread.sleep(1500);
+        Thread.sleep(2500);
         
         trayIcon.displayMessage("Pomodoro Clock", "Time out!", TrayIcon.MessageType.INFO);
+        trayIcon.setToolTip("Time out!");
         screen.maximize();
     }
     
